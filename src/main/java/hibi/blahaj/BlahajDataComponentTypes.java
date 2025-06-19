@@ -1,5 +1,6 @@
 package hibi.blahaj;
 
+import net.fabricmc.fabric.api.item.v1.ComponentTooltipAppenderRegistry;
 import net.minecraft.component.*;
 import net.minecraft.registry.*;
 import net.minecraft.util.*;
@@ -15,7 +16,7 @@ public class BlahajDataComponentTypes {
 	}
 
 	public static void register() {
-
+        ComponentTooltipAppenderRegistry.addFirst(OWNER);
 	}
 
 }

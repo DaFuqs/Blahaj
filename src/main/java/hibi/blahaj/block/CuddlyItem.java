@@ -30,19 +30,6 @@ public class CuddlyItem extends BlockItem {
 		}
 	}
 
-	@Override
-	public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
-		super.appendTooltip(stack, context, displayComponent, textConsumer, type);
-
-		if (this.tooltip != null) {
-			textConsumer.accept(this.tooltip);
-		}
-
-		// this is kinda dum, but I don't really feel like mixin in there
-		// and I haven't found a FAPI event for that exact injection point
-		stack.appendComponentTooltip(BlahajDataComponentTypes.OWNER, context, displayComponent, textConsumer, type);
-	}
-
 	public static final Identifier MINING_SPEED_MODIFIER_ID = Identifier.of(Blahaj.MOD_ID, "base_attack_damage");
 
 	public static AttributeModifiersComponent createAttributeModifiers() {
