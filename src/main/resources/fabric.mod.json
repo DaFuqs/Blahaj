@@ -29,7 +29,7 @@
     "blahaj.mixins.json"
   ],
   "depends": {
-    "minecraft": ">=1.21.6",
+    "minecraft": ">=${minecraft_version}",
     "fabricloader": "*",
     "fabric-api": "*"
   }
