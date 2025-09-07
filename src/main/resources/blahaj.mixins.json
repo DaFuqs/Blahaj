@@ -4,7 +4,9 @@
   "package": "hibi.blahaj.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [],
-  "client": [],
+  "client": [
+      "PlayerEntityRendererMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
 	}
