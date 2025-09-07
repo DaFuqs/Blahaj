@@ -1,15 +1,22 @@
 package hibi.blahaj.block;
 
-import net.fabricmc.fabric.api.blockrenderlayer.v1.*;
-import net.fabricmc.fabric.api.itemgroup.v1.*;
-import net.minecraft.block.*;
-import net.minecraft.client.render.*;
-import net.minecraft.entity.*;
-import net.minecraft.item.*;
-import net.minecraft.registry.*;
-import net.minecraft.util.*;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 
 import java.util.*;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.client.render.BlockRenderLayer;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroups;
+import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.util.Identifier;
 
 import static hibi.blahaj.Blahaj.*;
 
@@ -73,7 +80,7 @@ public class BlahajBlocks {
 
 	public static void registerClient() {
 		for (Block block : BLOCKS) {
-			BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutout());
+			BlockRenderLayerMap.putBlock(block, BlockRenderLayer.CUTOUT);
 		}
 	}
 
