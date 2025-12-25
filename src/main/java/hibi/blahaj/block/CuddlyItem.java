@@ -41,8 +41,8 @@ public class CuddlyItem extends BlockItem {
 		}
 
 		// this is kinda dum, but I don't really feel like mixin in there
-		// and I haven't found a FAPI event for that exact injection point
-		stack.addToTooltip(BlahajDataComponentTypes.OWNER, context, displayComponent, textConsumer, type);
+		// and I haven't found an event for that exact injection point
+		stack.addToTooltip(BlahajDataComponentTypes.OWNER.get(), context, displayComponent, textConsumer, type);
 	}
 
 	public static final Identifier MINING_SPEED_MODIFIER_ID = Identifier.fromNamespaceAndPath(Blahaj.MOD_ID, "base_attack_damage");

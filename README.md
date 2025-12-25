@@ -1,6 +1,6 @@
 # Blåhaj
 
-**A minecraft mod that adds the IKEA BLÅHAJ Soft toy shark and a giant bread pillow as items.**
+**A minecraft mod adding the popular Blåhaj plushies from ikea as well a collection of other plushies.**
 
 - When you craft or rename a plushie, it'll have your username attached to it.
 - You can place the plushies down!
@@ -28,4 +28,4 @@ If you are a Quilt user on <=1.20.1 use their version instead and say thanks! �
   own projects.
 - The icon of this project is the Blobhaj by Heatherhorns, and is licensed under a Creative Commons Attribution 4.0
   International License.
-- Most ingame images are from the original creator Hibiii.
+- Some ingame images are from the original creator Hibiii.

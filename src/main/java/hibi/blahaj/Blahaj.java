@@ -2,28 +2,51 @@ package hibi.blahaj;
 
 import hibi.blahaj.block.*;
 import hibi.blahaj.sound.*;
-import net.fabricmc.api.*;
-import net.fabricmc.fabric.api.loot.v3.*;
-import net.fabricmc.fabric.api.object.builder.v1.trade.*;
-import net.minecraft.world.entity.npc.villager.*;
+import net.minecraft.resources.*;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.trading.*;
-import net.minecraft.world.level.storage.loot.*;
-import net.minecraft.world.level.storage.loot.entries.*;
+import net.neoforged.bus.api.*;
+import net.neoforged.fml.common.*;
+import net.neoforged.neoforge.event.*;
+import net.neoforged.neoforge.registries.*;
 
-public class Blahaj implements ModInitializer {
+@Mod(Blahaj.MOD_ID)
+public class Blahaj {
 
 	public static final String MOD_ID = "blahaj";
 
-	public void onInitialize() {
-		BlahajDataComponentTypes.register();
-		BlahajBlocks.register();
-		BlahajSoundEvents.init();
-		registerLootTables();
-		registerTrades();
+	public Blahaj(IEventBus modBus) {
+		BlahajDataComponentTypes.register(modBus);
+		BlahajBlocks.register(modBus);
+		BlahajSoundEvents.register(modBus);
 	}
 
-	private static void registerLootTables() {
+	public static Identifier id(String id) {
+		return Identifier.fromNamespaceAndPath(MOD_ID, id);
+	}
+
+	@SubscribeEvent
+	public static void buildCreativeModeTab(BuildCreativeModeTabContentsEvent event) {
+		// Is this the tab we want to add to?
+		if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+			for (DeferredItem<Item> item : BlahajBlocks.ITEM_LIST) {
+				event.accept(item);
+			}
+		}
+	}
+
+	/*@SubscribeEvent // on the mod event bus
+	public static void tradeWithVillager(TradeWithVillagerEvent event) {
+		if(event.getAbstractVillager() instanceof Villager villager && villager.getVillagerData().profession() == VillagerProfession.SHEPHERD) {
+
+		}
+
+		TradeOfferHelper.registerVillagerOffers(VillagerProfession.SHEPHERD, 5, factories -> {
+			factories.add((world, entity, random) -> new MerchantOffer(new ItemCost(Items.EMERALD, 15), new ItemStack(BlahajBlocks.GRAY_SHARK_BLOCK), 2, 30, 0.1f));
+		});
+	}
+
+	@SubscribeEvent // on the mod event bus
+	public static void lootTableLoad(LootTableLoadEvent event) {
 		LootTableEvents.MODIFY.register((key, builder, lootTableSource, wrapperLookup) -> {
 			if (key.equals(BuiltInLootTables.STRONGHOLD_CROSSING) || key.equals(BuiltInLootTables.STRONGHOLD_CORRIDOR)) {
 				LootPool.Builder pb = LootPool.lootPool()
@@ -50,12 +73,6 @@ public class Blahaj implements ModInitializer {
 				builder.withPool(pb);
 			}
 		});
-	}
-
-	private static void registerTrades() {
-		TradeOfferHelper.registerVillagerOffers(VillagerProfession.SHEPHERD, 5, factories -> {
-			factories.add((world, entity, random) -> new MerchantOffer(new ItemCost(Items.EMERALD, 15), new ItemStack(BlahajBlocks.GRAY_SHARK_BLOCK), 2, 30, 0.1f));
-		});
-	}
+	}*/
 
 }

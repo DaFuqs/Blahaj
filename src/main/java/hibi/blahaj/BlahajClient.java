@@ -1,12 +1,14 @@
 package hibi.blahaj;
 
 import hibi.blahaj.block.*;
-import net.fabricmc.api.*;
+import net.neoforged.api.distmarker.*;
+import net.neoforged.bus.api.*;
+import net.neoforged.fml.common.*;
 
-public class BlahajClient implements ClientModInitializer {
+@Mod(value = Blahaj.MOD_ID, dist = Dist.CLIENT)
+public class BlahajClient {
 
-	@Override
-	public void onInitializeClient() {
+	public BlahajClient(IEventBus modBus) {
 		BlahajBlocks.registerClient();
 	}
 

@@ -1,65 +1,70 @@
 plugins {
-	id 'fabric-loom' version "${loom_version}"
+	id 'idea'
 	id 'maven-publish'
+	id 'net.neoforged.gradle.userdev' version '7.1.12'
 }
 
-version = project.mod_version
-group = project.maven_group
-
-base {
-	archivesName = project.archives_base_name
-}
+version = mod_version
+group = mod_group_id
 
 repositories {
 
 }
 
+base {
+	archivesName = mod_id
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+runs {
+	configureEach {
+		systemProperty 'forge.logging.markers', 'REGISTRIES'
+		systemProperty 'forge.logging.console.level', 'debug'
+	}
+
+	client {
+		systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+	}
+
+	server {
+		systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+		programArgument '--nogui'
+	}
+}
+
 dependencies {
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings loom.officialMojangMappings()
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	implementation "net.neoforged:neoforge:${neoforge_version}"
 }
 
-processResources {
-	inputs.property "version", project.version
-	inputs.property "minecraft_version", project.minecraft_version
-	inputs.property "loader_version", project.loader_version
-	filteringCharset "UTF-8"
+// This block of code expands all declared replace properties in the specified resource targets.
+// A missing property will result in an error. Properties are expanded using ${} Groovy notation.
+tasks.withType(ProcessResources).configureEach {
+	var replaceProperties = [
+		minecraft_version      : minecraft_version,
+		minecraft_version_range: minecraft_version_range,
+		neoforge_version       : neoforge_version,
+		neoforge_version_range : neoforge_version_range,
+		mod_id                 : mod_id,
+		mod_name               : mod_name,
+		mod_license            : mod_license,
+		mod_version            : mod_version,
+		mod_authors            : mod_authors,
+		mod_description        : mod_description,
+		issue_tracker_url      : issue_tracker_url,
+		display_url            : display_url
+	]
+	inputs.properties replaceProperties
 
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version,
-			"minecraft_version": project.minecraft_version,
-			"loader_version": project.loader_version
+	filesMatching(['META-INF/neoforge.mods.toml']) {
+		expand replaceProperties
 	}
 }
 
-tasks.withType(JavaCompile).configureEach {
-	it.options.release = 21
-}
-
-java {
-	withSourcesJar()
-
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
-}
-
-jar {
-	inputs.property "archivesName", project.base.archivesName
-
-	from("LICENSE") {
-		rename { "${it}_${inputs.properties.archivesName}" }
-	}
-}
-
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from components.java
-		}
-	}
-
-	repositories {
+// IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
+idea {
+	module {
+		downloadSources = true
+		downloadJavadoc = true
 	}
 }

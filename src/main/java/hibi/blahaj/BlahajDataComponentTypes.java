@@ -1,22 +1,28 @@
 package hibi.blahaj;
 
-import net.minecraft.core.*;
 import net.minecraft.core.component.*;
 import net.minecraft.core.registries.*;
-import net.minecraft.resources.*;
+import net.neoforged.bus.api.*;
+import net.neoforged.neoforge.registries.*;
 
 import java.util.function.*;
 
 public class BlahajDataComponentTypes {
 
-	public static final DataComponentType<OwnerComponent> OWNER = register("owner", (builder) -> builder.persistent(OwnerComponent.CODEC).networkSynchronized(OwnerComponent.PACKET_CODEC).cacheEncoding());
+	public static final DeferredRegister.DataComponents REGISTRAR = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, Blahaj.MOD_ID);
 
-	private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
-		return Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Identifier.fromNamespaceAndPath(Blahaj.MOD_ID, id), builderOperator.apply(DataComponentType.builder()).build());
-	}
+	public static final Supplier<DataComponentType<OwnerComponent>> OWNER = REGISTRAR.registerComponentType(
+		"owner",
+		builder -> builder
+			// The codec to read/write the data to disk
+			.persistent(OwnerComponent.CODEC)
+			// The codec to read/write the data across the network
+			.networkSynchronized(OwnerComponent.PACKET_CODEC)
+			.cacheEncoding()
+	);
 
-	public static void register() {
-
+	public static void register(IEventBus eventBus) {
+		REGISTRAR.register(eventBus);
 	}
 
 }
