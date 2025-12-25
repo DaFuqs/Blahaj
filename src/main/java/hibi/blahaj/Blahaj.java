@@ -3,10 +3,13 @@ package hibi.blahaj;
 import hibi.blahaj.block.*;
 import hibi.blahaj.sound.*;
 import net.minecraft.resources.*;
+import net.minecraft.world.entity.npc.villager.*;
 import net.minecraft.world.item.*;
 import net.neoforged.bus.api.*;
 import net.neoforged.fml.common.*;
+import net.neoforged.neoforge.common.*;
 import net.neoforged.neoforge.event.*;
+import net.neoforged.neoforge.event.village.*;
 import net.neoforged.neoforge.registries.*;
 
 @Mod(Blahaj.MOD_ID)
@@ -20,6 +23,7 @@ public class Blahaj {
 		BlahajSoundEvents.register(modBus);
 
 		modBus.addListener(Blahaj::buildCreativeModeTabContents);
+		NeoForge.EVENT_BUS.addListener(Blahaj::tradeWithVillager);
 	}
 
 	public static Identifier id(String id) {
@@ -28,7 +32,6 @@ public class Blahaj {
 
 	@SubscribeEvent
 	public static void buildCreativeModeTabContents(BuildCreativeModeTabContentsEvent event) {
-		// Is this the tab we want to add to?
 		if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
 			for (DeferredHolder<Item, ? extends Item> item : BlahajBlocks.ITEMS.getEntries()) {
 				event.accept(item.get());
@@ -36,17 +39,14 @@ public class Blahaj {
 		}
 	}
 
-	/*@SubscribeEvent // on the mod event bus
-	public static void tradeWithVillager(TradeWithVillagerEvent event) {
-		if(event.getAbstractVillager() instanceof Villager villager && villager.getVillagerData().profession() == VillagerProfession.SHEPHERD) {
-
+	@SubscribeEvent
+	public static void tradeWithVillager(VillagerTradesEvent event) {
+		if (event.getType() == VillagerProfession.SHEPHERD) {
+			event.getTrades().get(5).add(new VillagerTrades.ItemsForEmeralds(new ItemStack(BlahajBlocks.GRAY_SHARK_BLOCK.get().asItem()), 15, 1, 2, 30, 0.1f));
 		}
-
-		TradeOfferHelper.registerVillagerOffers(VillagerProfession.SHEPHERD, 5, factories -> {
-			factories.add((world, entity, random) -> new MerchantOffer(new ItemCost(Items.EMERALD, 15), new ItemStack(BlahajBlocks.GRAY_SHARK_BLOCK), 2, 30, 0.1f));
-		});
 	}
 
+	/*
 	@SubscribeEvent // on the mod event bus
 	public static void lootTableLoad(LootTableLoadEvent event) {
 		LootTableEvents.MODIFY.register((key, builder, lootTableSource, wrapperLookup) -> {
