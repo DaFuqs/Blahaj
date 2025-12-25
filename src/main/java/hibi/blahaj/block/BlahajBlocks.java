@@ -2,12 +2,14 @@ package hibi.blahaj.block;
 
 import net.fabricmc.fabric.api.client.rendering.v1.*;
 import net.fabricmc.fabric.api.itemgroup.v1.*;
-import net.minecraft.block.*;
-import net.minecraft.client.render.*;
-import net.minecraft.entity.*;
-import net.minecraft.item.*;
-import net.minecraft.registry.*;
-import net.minecraft.util.*;
+import net.minecraft.client.renderer.chunk.*;
+import net.minecraft.core.*;
+import net.minecraft.core.registries.*;
+import net.minecraft.resources.*;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.*;
 
 import java.util.*;
 
@@ -15,11 +17,11 @@ import static hibi.blahaj.Blahaj.*;
 
 public class BlahajBlocks {
 
-	public static final Identifier GRAY_SHARK_ID = Identifier.of(MOD_ID, "gray_shark");
-	public static final Identifier BLAHAJ_ID = Identifier.of(MOD_ID, "blue_shark");
-	public static final Identifier BLAVINGAD_ID = Identifier.of(MOD_ID, "blue_whale");
-	public static final Identifier BREAD_ID = Identifier.of(MOD_ID, "bread");
-	public static final Identifier BROWN_BEAR_ID = Identifier.of(MOD_ID, "brown_bear");
+	public static final Identifier GRAY_SHARK_ID = Identifier.fromNamespaceAndPath(MOD_ID, "gray_shark");
+	public static final Identifier BLAHAJ_ID = Identifier.fromNamespaceAndPath(MOD_ID, "blue_shark");
+	public static final Identifier BLAVINGAD_ID = Identifier.fromNamespaceAndPath(MOD_ID, "blue_whale");
+	public static final Identifier BREAD_ID = Identifier.fromNamespaceAndPath(MOD_ID, "bread");
+	public static final Identifier BROWN_BEAR_ID = Identifier.fromNamespaceAndPath(MOD_ID, "brown_bear");
 
 	public static Block GRAY_SHARK_BLOCK;
 	public static Block BLAHAJ_BLOCK;
@@ -43,26 +45,26 @@ public class BlahajBlocks {
 		BROWN_BEAR_BLOCK = registerCuddlyBlockAndItem(BROWN_BEAR_ID, "block.blahaj.brown_bear.tooltip");
 
 		for (String name : PRIDE_NAMES) {
-			Identifier id = Identifier.of(MOD_ID, name + "_shark");
+			Identifier id = Identifier.fromNamespaceAndPath(MOD_ID, name + "_shark");
 			registerCuddlyBlockAndItem(id, "block.blahaj.blue_shark.tooltip");
 		}
 
-		ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(entries -> {
+		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(entries -> {
 			for (Item item : ITEMS) {
-				entries.add(new ItemStack(item));
+				entries.accept(new ItemStack(item));
 			}
 		});
 	}
 
 	public static Block registerCuddlyBlockAndItem(Identifier id, String tooltip) {
-		RegistryKey<Block> blockKey = RegistryKey.of(RegistryKeys.BLOCK, id);
-		RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, id);
-		Block block = Registry.register(Registries.BLOCK, id, new CuddlyBlock(AbstractBlock.Settings.copy(Blocks.WHITE_WOOL).registryKey(blockKey)));
-		Item item = Registry.register(Registries.ITEM, id, new CuddlyItem(block, new Item.Settings()
-			.registryKey(itemKey)
-			.useBlockPrefixedTranslationKey()
-			.maxCount(1)
-			.attributeModifiers(CuddlyItem.createAttributeModifiers())
+		ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, id);
+		ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, id);
+		Block block = Registry.register(BuiltInRegistries.BLOCK, id, new CuddlyBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_WOOL).setId(blockKey)));
+		Item item = Registry.register(BuiltInRegistries.ITEM, id, new CuddlyItem(block, new net.minecraft.world.item.Item.Properties()
+			.setId(itemKey)
+			.useBlockDescriptionPrefix()
+			.stacksTo(1)
+			.attributes(CuddlyItem.createAttributeModifiers())
 			.equippableUnswappable(EquipmentSlot.HEAD), tooltip));
 
 		BLOCKS.add(block);
@@ -73,7 +75,7 @@ public class BlahajBlocks {
 
 	public static void registerClient() {
 		for (Block block : BLOCKS) {
-			BlockRenderLayerMap.putBlock(block, BlockRenderLayer.CUTOUT);
+			BlockRenderLayerMap.putBlock(block, ChunkSectionLayer.CUTOUT);
 		}
 	}
 

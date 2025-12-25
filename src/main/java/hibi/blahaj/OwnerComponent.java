@@ -1,41 +1,42 @@
 package hibi.blahaj;
 
 import com.mojang.serialization.*;
-import net.minecraft.component.*;
-import net.minecraft.item.*;
-import net.minecraft.item.tooltip.*;
+import net.minecraft.*;
+import net.minecraft.core.component.*;
 import net.minecraft.network.*;
+import net.minecraft.network.chat.*;
 import net.minecraft.network.codec.*;
-import net.minecraft.text.*;
-import net.minecraft.util.*;
-import org.jetbrains.annotations.*;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.*;
+import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.*;
 
 import java.util.function.*;
 
-public class OwnerComponent implements TooltipAppender {
+public class OwnerComponent implements TooltipProvider {
 
-	public static final Codec<OwnerComponent> CODEC = TextCodecs.CODEC.xmap(OwnerComponent::new, OwnerComponent::getOwnerName);
-	public static final PacketCodec<RegistryByteBuf, OwnerComponent> PACKET_CODEC = TextCodecs.REGISTRY_PACKET_CODEC.xmap(OwnerComponent::new, OwnerComponent::getOwnerName);
+	public static final Codec<OwnerComponent> CODEC = ComponentSerialization.CODEC.xmap(OwnerComponent::new, OwnerComponent::getOwnerName);
+	public static final StreamCodec<RegistryFriendlyByteBuf, OwnerComponent> PACKET_CODEC = ComponentSerialization.STREAM_CODEC.map(OwnerComponent::new, OwnerComponent::getOwnerName);
 
-	final Text ownerName;
+	final Component ownerName;
 
-	public OwnerComponent(Text ownerName) {
+	public OwnerComponent(Component ownerName) {
 		this.ownerName = ownerName;
 	}
 
-	private Text getOwnerName() {
+	private Component getOwnerName() {
 		return this.ownerName;
 	}
 
 	@Override
-	public void appendTooltip(Item.TooltipContext context, Consumer<Text> textConsumer, TooltipType type, ComponentsAccess components) {
+	public void addToTooltip(Item.@NonNull TooltipContext context, @NonNull Consumer<Component> textConsumer, @NonNull TooltipFlag type, DataComponentGetter components) {
 		@Nullable OwnerComponent owner = components.get(BlahajDataComponentTypes.OWNER);
 		if (owner != null) {
-			@Nullable Text customName = components.get(DataComponentTypes.CUSTOM_NAME);
+			@Nullable Component customName = components.get(DataComponents.CUSTOM_NAME);
 			if (customName == null) {
-				textConsumer.accept(Text.translatable("tooltip.blahaj.owner.craft", owner.getOwnerName()).formatted(Formatting.GRAY));
+				textConsumer.accept(Component.translatable("tooltip.blahaj.owner.craft", owner.getOwnerName()).withStyle(ChatFormatting.GRAY));
 			} else {
-				textConsumer.accept(Text.translatable("tooltip.blahaj.owner.rename", customName, owner.getOwnerName()).formatted(Formatting.GRAY));
+				textConsumer.accept(Component.translatable("tooltip.blahaj.owner.rename", customName, owner.getOwnerName()).withStyle(ChatFormatting.GRAY));
 			}
 		}
 	}

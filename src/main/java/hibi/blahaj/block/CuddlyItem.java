@@ -1,29 +1,31 @@
 package hibi.blahaj.block;
 
 import hibi.blahaj.*;
-import net.minecraft.block.*;
-import net.minecraft.component.type.*;
-import net.minecraft.entity.attribute.*;
-import net.minecraft.entity.player.*;
-import net.minecraft.item.*;
-import net.minecraft.item.tooltip.*;
-import net.minecraft.text.*;
-import net.minecraft.util.*;
+import net.minecraft.*;
+import net.minecraft.network.chat.*;
+import net.minecraft.resources.*;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.*;
+import net.minecraft.world.entity.player.*;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.*;
+import net.minecraft.world.level.block.*;
+import org.jspecify.annotations.*;
 
 import java.util.function.*;
 
 public class CuddlyItem extends BlockItem {
 
-	private final Text tooltip;
+	private final Component tooltip;
 
-	public CuddlyItem(Block block, Settings settings, String tooltip) {
+	public CuddlyItem(Block block, Properties settings, String tooltip) {
 		super(block, settings);
-		this.tooltip = tooltip == null ? null : Text.translatable(tooltip).formatted(Formatting.GRAY);
+		this.tooltip = tooltip == null ? null : Component.translatable(tooltip).withStyle(ChatFormatting.GRAY);
 	}
 
 	@Override
-	public void onCraftByPlayer(ItemStack stack, PlayerEntity player) {
-		super.onCraftByPlayer(stack, player);
+	public void onCraftedBy(@NonNull ItemStack stack, @NonNull Player player) {
+		super.onCraftedBy(stack, player);
 
 		if (player != null) { // compensate for auto-crafter mods that call the wrong method
 			stack.set(BlahajDataComponentTypes.OWNER, new OwnerComponent(player.getName()));
@@ -31,8 +33,8 @@ public class CuddlyItem extends BlockItem {
 	}
 
 	@Override
-	public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
-		super.appendTooltip(stack, context, displayComponent, textConsumer, type);
+	public void appendHoverText(@NonNull ItemStack stack, @NonNull TooltipContext context, @NonNull TooltipDisplay displayComponent, @NonNull Consumer<Component> textConsumer, @NonNull TooltipFlag type) {
+		super.appendHoverText(stack, context, displayComponent, textConsumer, type);
 
 		if (this.tooltip != null) {
 			textConsumer.accept(this.tooltip);
@@ -40,15 +42,15 @@ public class CuddlyItem extends BlockItem {
 
 		// this is kinda dum, but I don't really feel like mixin in there
 		// and I haven't found a FAPI event for that exact injection point
-		stack.appendComponentTooltip(BlahajDataComponentTypes.OWNER, context, displayComponent, textConsumer, type);
+		stack.addToTooltip(BlahajDataComponentTypes.OWNER, context, displayComponent, textConsumer, type);
 	}
 
-	public static final Identifier MINING_SPEED_MODIFIER_ID = Identifier.of(Blahaj.MOD_ID, "base_attack_damage");
+	public static final Identifier MINING_SPEED_MODIFIER_ID = Identifier.fromNamespaceAndPath(Blahaj.MOD_ID, "base_attack_damage");
 
-	public static AttributeModifiersComponent createAttributeModifiers() {
-		return AttributeModifiersComponent.builder()
-			.add(EntityAttributes.BLOCK_BREAK_SPEED, new EntityAttributeModifier(MINING_SPEED_MODIFIER_ID, -3.0, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), AttributeModifierSlot.MAINHAND)
-			.add(EntityAttributes.ATTACK_DAMAGE, new EntityAttributeModifier(BASE_ATTACK_DAMAGE_MODIFIER_ID, -2.0, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), AttributeModifierSlot.MAINHAND)
+	public static ItemAttributeModifiers createAttributeModifiers() {
+		return ItemAttributeModifiers.builder()
+			.add(Attributes.BLOCK_BREAK_SPEED, new AttributeModifier(MINING_SPEED_MODIFIER_ID, -3.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), EquipmentSlotGroup.MAINHAND)
+			.add(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_ID, -2.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), EquipmentSlotGroup.MAINHAND)
 			.build();
 	}
 

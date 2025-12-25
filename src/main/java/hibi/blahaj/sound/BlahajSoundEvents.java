@@ -1,10 +1,11 @@
 package hibi.blahaj.sound;
 
 import hibi.blahaj.*;
-import net.minecraft.registry.*;
-import net.minecraft.sound.*;
+import net.minecraft.core.*;
+import net.minecraft.core.registries.*;
+import net.minecraft.resources.*;
+import net.minecraft.sounds.*;
 import net.minecraft.util.*;
-import net.minecraft.util.math.random.Random;
 
 import java.util.*;
 
@@ -14,11 +15,11 @@ public class BlahajSoundEvents {
     public static final SoundEvent BLOCK_CUDDLY_ITEM_HIT = register("block.blahaj.cuddly_item.hit");
 
     private static Identifier id(String id) {
-        return Identifier.of(Blahaj.MOD_ID, id);
+		return Identifier.fromNamespaceAndPath(Blahaj.MOD_ID, id);
     }
 
     private static SoundEvent register(String id) {
-        return Registry.register(Registries.SOUND_EVENT, id(id), SoundEvent.of(id(id)));
+		return Registry.register(BuiltInRegistries.SOUND_EVENT, id(id), SoundEvent.createVariableRangeEvent(id(id)));
     }
 
     public static void init() {
@@ -27,7 +28,7 @@ public class BlahajSoundEvents {
 		}
 	}
 
-	public static SoundEvent getRandomSqueak(Random random) {
+	public static SoundEvent getRandomSqueak(RandomSource random) {
 		return BLOCK_CUDDLY_ITEM.get(random.nextInt(BLOCK_CUDDLY_ITEM.size()));
 	}
 
