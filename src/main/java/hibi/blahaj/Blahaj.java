@@ -5,6 +5,11 @@ import hibi.blahaj.sound.*;
 import net.minecraft.resources.*;
 import net.minecraft.world.entity.npc.villager.*;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.storage.loot.*;
+import net.minecraft.world.level.storage.loot.entries.*;
+import net.minecraft.world.level.storage.loot.predicates.*;
+import net.minecraft.world.level.storage.loot.providers.number.*;
 import net.neoforged.bus.api.*;
 import net.neoforged.fml.common.*;
 import net.neoforged.neoforge.common.*;
@@ -24,6 +29,7 @@ public class Blahaj {
 
 		modBus.addListener(Blahaj::buildCreativeModeTabContents);
 		NeoForge.EVENT_BUS.addListener(Blahaj::tradeWithVillager);
+		NeoForge.EVENT_BUS.addListener(Blahaj::lootTableLoad);
 	}
 
 	public static Identifier id(String id) {
@@ -46,35 +52,25 @@ public class Blahaj {
 		}
 	}
 
-	/*
 	@SubscribeEvent // on the mod event bus
 	public static void lootTableLoad(LootTableLoadEvent event) {
-		LootTableEvents.MODIFY.register((key, builder, lootTableSource, wrapperLookup) -> {
-			if (key.equals(BuiltInLootTables.STRONGHOLD_CROSSING) || key.equals(BuiltInLootTables.STRONGHOLD_CORRIDOR)) {
-				LootPool.Builder pb = LootPool.lootPool()
-					.add(LootItem.lootTableItem(BlahajBlocks.GRAY_SHARK_BLOCK).setWeight(5))
-					.add(LootItem.lootTableItem(Items.AIR).setWeight(100));
-				builder.withPool(pb);
-			} else if (key.equals(BuiltInLootTables.VILLAGE_PLAINS_HOUSE)) {
-				LootPool.Builder pb = LootPool.lootPool()
-					.add(LootItem.lootTableItem(BlahajBlocks.GRAY_SHARK_BLOCK))
-					.add(LootItem.lootTableItem(Items.AIR).setWeight(43));
-				builder.withPool(pb);
-			} else if (key.equals(BuiltInLootTables.VILLAGE_TAIGA_HOUSE) || key.equals(BuiltInLootTables.VILLAGE_SNOWY_HOUSE)) {
-				LootPool.Builder pb = LootPool.lootPool()
-					.add(LootItem.lootTableItem(BlahajBlocks.GRAY_SHARK_BLOCK).setWeight(5))
-					.add(LootItem.lootTableItem(Items.AIR).setWeight(54));
-				builder.withPool(pb);
-			} else if (key.equals(BuiltInLootTables.FLETCHER_GIFT)
-				|| key.equals(BuiltInLootTables.BUTCHER_GIFT)
-				|| key.equals(BuiltInLootTables.LEATHERWORKER_GIFT)) {
+		ResourceKey<LootTable> key = event.getKey();
 
-				LootPool.Builder pb = LootPool.lootPool()
-					.add(LootItem.lootTableItem(BlahajBlocks.BROWN_BEAR_BLOCK).setWeight(5))
-					.add(LootItem.lootTableItem(Items.AIR).setWeight(25));
-				builder.withPool(pb);
-			}
-		});
-	}*/
+		if (key.equals(BuiltInLootTables.STRONGHOLD_CROSSING) || key.equals(BuiltInLootTables.STRONGHOLD_CORRIDOR)) {
+			addLootPoolWithChance(event, BlahajBlocks.GRAY_SHARK_BLOCK, 0.05F);
+		} else if (key.equals(BuiltInLootTables.VILLAGE_PLAINS_HOUSE)) {
+			addLootPoolWithChance(event, BlahajBlocks.GRAY_SHARK_BLOCK, 0.02F);
+		} else if (key.equals(BuiltInLootTables.VILLAGE_TAIGA_HOUSE) || key.equals(BuiltInLootTables.VILLAGE_SNOWY_HOUSE)) {
+			addLootPoolWithChance(event, BlahajBlocks.GRAY_SHARK_BLOCK, 0.1F);
+		} else if (key.equals(BuiltInLootTables.FLETCHER_GIFT) || key.equals(BuiltInLootTables.BUTCHER_GIFT) || key.equals(BuiltInLootTables.LEATHERWORKER_GIFT)) {
+			addLootPoolWithChance(event, BlahajBlocks.BROWN_BEAR_BLOCK, 0.1F);
+		}
+	}
+
+	private static void addLootPoolWithChance(LootTableLoadEvent event, DeferredBlock<Block> block, float chance) {
+		LootPool.Builder pb = LootPool.lootPool().add(LootItem.lootTableItem(block));
+		pb.when(() -> new LootItemRandomChanceCondition(ConstantValue.exactly(chance)));
+		event.getTable().addPool(pb.build());
+	}
 
 }
