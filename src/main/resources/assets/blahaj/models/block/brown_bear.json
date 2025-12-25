@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/block",
+  "render_type": "cutout",
   "credit": "SpookyEna",
   "texture_size": [
     64,

@@ -1,6 +1,5 @@
 package hibi.blahaj;
 
-import hibi.blahaj.block.*;
 import net.neoforged.api.distmarker.*;
 import net.neoforged.bus.api.*;
 import net.neoforged.fml.common.*;
@@ -9,7 +8,7 @@ import net.neoforged.fml.common.*;
 public class BlahajClient {
 
 	public BlahajClient(IEventBus modBus) {
-		BlahajBlocks.registerClient();
+
 	}
 
 }

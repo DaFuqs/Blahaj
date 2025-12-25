@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/block",
+  "render_type": "cutout",
   "credit": "original model by hibii, changes made by musicalskele",
 	"texture_size": [32, 32],
 	"textures": {

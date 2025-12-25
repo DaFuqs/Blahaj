@@ -1,7 +1,5 @@
 package hibi.blahaj.block;
 
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.chunk.*;
 import net.minecraft.core.registries.*;
 import net.minecraft.resources.*;
 import net.minecraft.world.entity.*;
@@ -19,9 +17,6 @@ public class BlahajBlocks {
 
 	private static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(MOD_ID);
 	public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MOD_ID);
-
-	public static List<DeferredBlock<Block>> BLOCK_LIST = new ArrayList<>();
-	public static List<DeferredItem<Item>> ITEM_LIST = new ArrayList<>();
 
 	public static final Identifier GRAY_SHARK_ID = Identifier.fromNamespaceAndPath(MOD_ID, "gray_shark");
 	public static final Identifier BLAHAJ_ID = Identifier.fromNamespaceAndPath(MOD_ID, "blue_shark");
@@ -61,23 +56,14 @@ public class BlahajBlocks {
 			)
 		);
 
-		DeferredItem<Item> registeredItem = ITEMS.register(id.getPath(), identifier -> new CuddlyItem(registeredBlock.get(), new Item.Properties()
+		ITEMS.register(id.getPath(), identifier -> new CuddlyItem(registeredBlock.get(), new Item.Properties()
 			.setId(ResourceKey.create(Registries.ITEM, identifier))
 			.useBlockDescriptionPrefix()
 			.stacksTo(1)
 			.attributes(CuddlyItem.createAttributeModifiers())
 			.equippableUnswappable(EquipmentSlot.HEAD), tooltip));
 
-		BLOCK_LIST.add(registeredBlock);
-		ITEM_LIST.add(registeredItem);
-
 		return registeredBlock;
-	}
-
-	public static void registerClient() {
-		for (DeferredBlock<Block> block : BLOCK_LIST) {
-			ItemBlockRenderTypes.setRenderLayer(block.get(), ChunkSectionLayer.CUTOUT);
-		}
 	}
 
 }

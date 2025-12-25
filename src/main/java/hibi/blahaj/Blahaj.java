@@ -18,6 +18,8 @@ public class Blahaj {
 		BlahajDataComponentTypes.register(modBus);
 		BlahajBlocks.register(modBus);
 		BlahajSoundEvents.register(modBus);
+
+		modBus.addListener(Blahaj::buildCreativeModeTabContents);
 	}
 
 	public static Identifier id(String id) {
@@ -25,11 +27,11 @@ public class Blahaj {
 	}
 
 	@SubscribeEvent
-	public static void buildCreativeModeTab(BuildCreativeModeTabContentsEvent event) {
+	public static void buildCreativeModeTabContents(BuildCreativeModeTabContentsEvent event) {
 		// Is this the tab we want to add to?
 		if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-			for (DeferredItem<Item> item : BlahajBlocks.ITEM_LIST) {
-				event.accept(item);
+			for (DeferredHolder<Item, ? extends Item> item : BlahajBlocks.ITEMS.getEntries()) {
+				event.accept(item.get());
 			}
 		}
 	}
