@@ -11,12 +11,13 @@
     "DaFuqs"
   ],
   "contact": {
-    "homepage": "https://github.com/DaFuqs/Blahaj",
+    "homepage": "https://github.com/DaFuqs/",
     "issues": "https://github.com/DaFuqs/Blahaj/issues",
     "sources": "https://github.com/DaFuqs/Blahaj"
   },
-  "icon": "assets/blahaj/icon.png",
   "license": "Unlicense",
+  "icon": "assets/blahaj/icon.png",
+  "environment": "*",
   "entrypoints": {
     "main": [
       "hibi.blahaj.Blahaj"
