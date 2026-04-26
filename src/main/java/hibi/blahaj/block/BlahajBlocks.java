@@ -1,19 +1,23 @@
 package hibi.blahaj.block;
 
-import net.fabricmc.fabric.api.client.rendering.v1.*;
-import net.fabricmc.fabric.api.itemgroup.v1.*;
-import net.minecraft.client.renderer.chunk.*;
-import net.minecraft.core.*;
-import net.minecraft.core.registries.*;
-import net.minecraft.resources.*;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.item.*;
-import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.*;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import static hibi.blahaj.Blahaj.*;
+import static hibi.blahaj.Blahaj.MOD_ID;
 
 public class BlahajBlocks {
 
@@ -49,7 +53,7 @@ public class BlahajBlocks {
 			registerCuddlyBlockAndItem(id, "block.blahaj.blue_shark.tooltip");
 		}
 
-		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(entries -> {
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(entries -> {
 			for (Item item : ITEMS) {
 				entries.accept(new ItemStack(item));
 			}
@@ -74,9 +78,7 @@ public class BlahajBlocks {
 	}
 
 	public static void registerClient() {
-		for (Block block : BLOCKS) {
-			BlockRenderLayerMap.putBlock(block, ChunkSectionLayer.CUTOUT);
-		}
+
 	}
 
 }

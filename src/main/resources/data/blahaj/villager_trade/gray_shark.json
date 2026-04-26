@@ -1,0 +1,12 @@
+{
+  "gives": {
+    "id": "blahaj:gray_shark"
+  },
+  "max_uses": 2,
+  "reputation_discount": 0.1,
+  "wants": {
+    "count": 15,
+    "id": "minecraft:emerald"
+  },
+  "xp": 30
+}

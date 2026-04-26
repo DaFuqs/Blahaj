@@ -1,15 +1,13 @@
 package hibi.blahaj;
 
-import hibi.blahaj.block.*;
-import hibi.blahaj.sound.*;
-import net.fabricmc.api.*;
-import net.fabricmc.fabric.api.loot.v3.*;
-import net.fabricmc.fabric.api.object.builder.v1.trade.*;
-import net.minecraft.world.entity.npc.villager.*;
-import net.minecraft.world.item.*;
-import net.minecraft.world.item.trading.*;
-import net.minecraft.world.level.storage.loot.*;
-import net.minecraft.world.level.storage.loot.entries.*;
+import hibi.blahaj.block.BlahajBlocks;
+import hibi.blahaj.sound.BlahajSoundEvents;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
 
 public class Blahaj implements ModInitializer {
 
@@ -19,11 +17,7 @@ public class Blahaj implements ModInitializer {
 		BlahajDataComponentTypes.register();
 		BlahajBlocks.register();
 		BlahajSoundEvents.init();
-		registerLootTables();
-		registerTrades();
-	}
 
-	private static void registerLootTables() {
 		LootTableEvents.MODIFY.register((key, builder, lootTableSource, wrapperLookup) -> {
 			if (key.equals(BuiltInLootTables.STRONGHOLD_CROSSING) || key.equals(BuiltInLootTables.STRONGHOLD_CORRIDOR)) {
 				LootPool.Builder pb = LootPool.lootPool()
@@ -49,12 +43,6 @@ public class Blahaj implements ModInitializer {
 					.add(LootItem.lootTableItem(Items.AIR).setWeight(25));
 				builder.withPool(pb);
 			}
-		});
-	}
-
-	private static void registerTrades() {
-		TradeOfferHelper.registerVillagerOffers(VillagerProfession.SHEPHERD, 5, factories -> {
-			factories.add((world, entity, random) -> new MerchantOffer(new ItemCost(Items.EMERALD, 15), new ItemStack(BlahajBlocks.GRAY_SHARK_BLOCK), 2, 30, 0.1f));
 		});
 	}
 
