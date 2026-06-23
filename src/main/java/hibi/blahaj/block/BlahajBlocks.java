@@ -1,23 +1,17 @@
 package hibi.blahaj.block;
 
-import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.fabricmc.fabric.api.creativetab.v1.*;
+import net.minecraft.core.*;
+import net.minecraft.core.registries.*;
+import net.minecraft.resources.*;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import static hibi.blahaj.Blahaj.MOD_ID;
+import static hibi.blahaj.Blahaj.*;
 
 public class BlahajBlocks {
 
@@ -63,7 +57,7 @@ public class BlahajBlocks {
 	public static Block registerCuddlyBlockAndItem(Identifier id, String tooltip) {
 		ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, id);
 		ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, id);
-		Block block = Registry.register(BuiltInRegistries.BLOCK, id, new CuddlyBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_WOOL).setId(blockKey)));
+		Block block = Registry.register(BuiltInRegistries.BLOCK, id, new CuddlyBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WOOL.white()).setId(blockKey)));
 		Item item = Registry.register(BuiltInRegistries.ITEM, id, new CuddlyItem(block, new net.minecraft.world.item.Item.Properties()
 			.setId(itemKey)
 			.useBlockDescriptionPrefix()

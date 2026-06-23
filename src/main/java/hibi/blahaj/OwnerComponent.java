@@ -8,7 +8,6 @@ import net.minecraft.network.chat.*;
 import net.minecraft.network.codec.*;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.*;
-import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.*;
 
 import java.util.function.*;
