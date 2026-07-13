@@ -1,6 +1,13 @@
 package hibi.blahaj;
 
 import com.mojang.serialization.*;
+import net.minecraft.*;
+import net.minecraft.core.component.*;
+import net.minecraft.network.*;
+import net.minecraft.network.chat.*;
+import net.minecraft.network.codec.*;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.*;
 import org.jspecify.annotations.*;
 
 import java.util.function.*;

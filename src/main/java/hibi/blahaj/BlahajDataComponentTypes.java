@@ -1,5 +1,7 @@
 package hibi.blahaj;
 
+import net.minecraft.core.component.*;
+import net.minecraft.core.registries.*;
 import net.neoforged.bus.api.*;
 import net.neoforged.neoforge.registries.*;
 

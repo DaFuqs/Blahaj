@@ -51,7 +51,7 @@ public class BlahajBlocks {
 	public static DeferredBlock<Block> registerCuddlyBlockAndItem(Identifier id, String tooltip) {
 		DeferredBlock<Block> registeredBlock = BLOCKS.register(id.getPath(), identifier -> new CuddlyBlock(
 				BlockBehaviour.Properties
-					.ofFullCopy(Blocks.WHITE_WOOL)
+					.ofFullCopy(Blocks.WOOL.white())
 					.setId(ResourceKey.create(Registries.BLOCK, identifier))
 			)
 		);
