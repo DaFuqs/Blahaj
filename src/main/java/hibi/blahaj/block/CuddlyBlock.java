@@ -18,16 +18,10 @@ import org.jspecify.annotations.*;
 public class CuddlyBlock extends HorizontalDirectionalBlock {
 
 	protected static final VoxelShape SHAPE = Block.box(4.0, 0.0, 4.0, 12.0, 8.0, 12.0);
-	public static final MapCodec<CuddlyBlock> CODEC = simpleCodec(CuddlyBlock::new);
 
 	public CuddlyBlock(Properties settings) {
 		super(settings);
 		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
-	}
-
-	@Override
-	protected @NonNull MapCodec<? extends HorizontalDirectionalBlock> codec() {
-		return CODEC;
 	}
 
 	public @NonNull VoxelShape getShape(@NonNull BlockState state, @NonNull BlockGetter world, @NonNull BlockPos pos, @NonNull CollisionContext context) {
