@@ -2,6 +2,8 @@ package hibi.blahaj;
 
 import hibi.blahaj.block.*;
 import hibi.blahaj.sound.*;
+
+import net.minecraft.core.Holder;
 import net.minecraft.resources.*;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.*;
@@ -9,6 +11,8 @@ import net.minecraft.world.level.storage.loot.*;
 import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.number.*;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
+
 import net.neoforged.bus.api.*;
 import net.neoforged.fml.common.*;
 import net.neoforged.neoforge.common.*;
@@ -59,7 +63,7 @@ public class Blahaj {
 
 	private static void addLootPoolWithChance(LootTableLoadEvent event, DeferredBlock<Block> block, float chance) {
 		LootPool.Builder pb = LootPool.lootPool().add(LootItem.lootTableItem(block));
-		pb.when(() -> new LootItemRandomChanceCondition(ConstantValue.exactly(chance)));
+		pb.when(() -> new LootItemRandomChanceCondition(ContextFloatProviders.exactly(chance)));
 		event.getTable().addPool(pb.build());
 	}
 
